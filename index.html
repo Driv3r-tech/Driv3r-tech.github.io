@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="style_cp.css">
+</head>
+<body>
+	<div class="step">
+		<p id="answer"></p>
+		<select id="L0"></select><br/>
+		<select id="L1"></select><br/>
+		<select id="L2"></select><br/>
+		<button id="saveButton" class="select">Сохранить результаты</button>
+	</div>
+  <script src="script.js"></script>
+  <script src="//api.bitrix24.com/api/v1/"></script>
+    <script>
+        // Make a call to REST when JS SDK is loaded
+        BX24.init(function(){
+			deal = BX24.placement.info();
+			console.log(deal.options.ID);
+			
+			BX24.callMethod("crm.deal.get", { id: deal.options.ID }, function(result) {
+					if(result.error())
+						console.error(result.error());
+					else {
+						console.dir(result.data());
+						var name = document.getElementById('answer');
+						if (result.data().UF_CRM_1690285429830 == "") name.innerHTML = "Пусто";
+						else name.innerHTML = result.data().UF_CRM_1690285429830;
+						console.dir(result.data().UF_CRM_1690285429830);
+					}
+				}
+			);
+
+			console.log('B24 SDK is ready!', BX24.isAdmin());			
+			
+			BX24.placement.call('reloadData', function(){console.log('reload call')});
+			
+			console.log('ROOM');			
+        });
+		
+		BX24.placement.call('reloadData', function(){console.log('reload call 22222')});
+    </script>
+  </body>
+</html>
